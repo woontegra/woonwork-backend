@@ -1,0 +1,27 @@
+{
+  "name": "woonwork",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WoonWork — Çok kiracılı şirket çalışma platformu",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:web": "npm run dev -w @woonwork/web",
+    "dev:api": "npm run dev -w @woonwork/api",
+    "build": "npm run build --workspaces --if-present",
+    "db:generate": "npm run db:generate -w @woonwork/api",
+    "db:migrate": "npm run db:migrate -w @woonwork/api",
+    "db:seed": "npm run db:seed -w @woonwork/api",
+    "db:push": "npm run db:push -w @woonwork/api",
+    "db:start": "pg_ctl -D .data/postgres -l .data/postgres/log.txt start",
+    "db:stop": "pg_ctl -D .data/postgres stop",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
