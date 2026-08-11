@@ -1,45 +1,22 @@
-# Local Postgres data
-.data/
-
 # Dependencies
 node_modules/
-.pnp
-.pnp.js
+shared/node_modules/
+shared/dist/
 
 # Build
 dist/
-build/
 *.tsbuildinfo
-packages/*/dist/
 
 # Env
 .env
 .env.local
 .env.*.local
 !.env.example
-!apps/api/.env.example
-!apps/web/.env.example
 
-# Logs
+# Logs / OS
 logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# IDE / OS
-.idea/
-.vscode/
-*.swp
 .DS_Store
 Thumbs.db
-
-# Prisma
-apps/api/prisma/*.db
-apps/api/prisma/*.db-journal
-
-# Coverage / cache
-coverage/
-.cache/
-.turbo/
-.vite/
+.idea/
+.vscode/

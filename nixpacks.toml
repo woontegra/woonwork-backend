@@ -1,13 +1,13 @@
-﻿providers = ["node"]
+providers = ["node"]
 
 [variables]
 NIXPACKS_NODE_VERSION = "20"
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["npm install"]
 
 [phases.build]
-cmds = ["npm run build:api"]
+cmds = ["npm run build"]
 
 [start]
-cmd = "cd apps/api && npx prisma db push && node dist/index.js"
+cmd = "npx prisma db push && node dist/index.js"
