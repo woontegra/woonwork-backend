@@ -10,6 +10,7 @@ node_modules/
 dist/
 build/
 *.tsbuildinfo
+packages/*/dist/
 
 # Env
 .env

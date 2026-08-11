@@ -7,7 +7,8 @@ dotenv.config();
 
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
-  API_PORT: z.coerce.number().default(4000),
+  API_PORT: z.coerce.number().optional(),
+  PORT: z.coerce.number().optional(),
   CORS_ORIGIN: z.string().default('http://localhost:5173'),
   JWT_ACCESS_SECRET: z.string().min(32),
   JWT_REFRESH_SECRET: z.string().min(32),
@@ -25,4 +26,7 @@ if (!parsed.success) {
   throw new Error('Ortam değişkenleri doğrulanamadı');
 }
 
-export const env = parsed.data;
+export const env = {
+  ...parsed.data,
+  API_PORT: parsed.data.PORT ?? parsed.data.API_PORT ?? 4000,
+};

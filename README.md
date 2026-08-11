@@ -31,24 +31,43 @@ npm run dev:web
 - API: http://localhost:4000
 - Web: http://localhost:5173
 
-### Yerel Postgres (proje içi)
-
-Sistem PostgreSQL 18 kuruluysa proje içinde ayrı bir cluster kullanılabilir:
-
-```bash
-# bir kez
-initdb -D .data/postgres -U postgres -A trust --locale=C --encoding=UTF8
-# postgresql.conf içine: port = 5433
-pg_ctl -D .data/postgres -l .data/postgres/log.txt start
-createdb -h 127.0.0.1 -p 5433 -U postgres woonwork
-```
-
 Seed giriş bilgileri `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` değerlerinden alınır.
 
 ## Monorepo
 
 ```
-apps/web       — React arayüz
-apps/api       — Express API
+apps/web        — React arayüz
+apps/api        — Express API
 packages/shared — Ortak tipler ve Zod şemaları
+```
+
+## Railway deploy
+
+`@woonwork/shared` private monorepo paketidir. Railway’de **Root Directory’yi `apps/api` veya `apps/web` yapma** — npm registry’de bulunamaz (`E404`).
+
+Her iki servis için:
+
+1. **Root Directory:** boş bırak (repo kökü)
+2. **Builder:** Dockerfile
+3. API Dockerfile: `Dockerfile.api` (`railway.api.toml`)
+4. Web Dockerfile: `Dockerfile.web` (`railway.web.toml`)
+
+### API ortam değişkenleri
+
+- `DATABASE_URL` (Railway Postgres)
+- `JWT_ACCESS_SECRET` (min 32 karakter)
+- `JWT_REFRESH_SECRET` (min 32 karakter)
+- `CORS_ORIGIN` = frontend URL (örn. `https://web-xxx.up.railway.app`)
+- `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` (ilk seed için, opsiyonel)
+
+`PORT` Railway tarafından otomatik verilir.
+
+### Web build arg
+
+- `VITE_API_URL` = `https://api-xxx.up.railway.app/api`
+
+İlk deploy sonrası API’de seed:
+
+```bash
+railway run -s <api-service> npm run db:seed -w @woonwork/api
 ```

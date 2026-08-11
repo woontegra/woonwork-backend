@@ -1,0 +1,24 @@
+# syntax=docker/dockerfile:1
+
+FROM node:20-bookworm-slim AS build
+WORKDIR /app
+RUN apt-get update -y && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+COPY package.json package-lock.json ./
+COPY packages/shared/package.json ./packages/shared/
+COPY apps/api/package.json ./apps/api/
+COPY apps/web/package.json ./apps/web/
+RUN npm ci
+COPY packages/shared ./packages/shared
+COPY apps/web ./apps/web
+RUN npm run build -w @woonwork/shared
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+RUN npm run build -w @woonwork/web
+
+FROM node:20-bookworm-slim AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+RUN npm install -g serve@14
+COPY --from=build /app/apps/web/dist ./dist
+EXPOSE 3000
+CMD ["serve", "-s", "dist", "-l", "3000"]
